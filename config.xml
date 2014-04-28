@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<widget xmlns = "http://www.w3.org/ns/widgets"
+    xmlns:gap = "http://phonegap.com/ns/1.0"
+    id        = "com.phonegap.example"
+    version   = "1.0.0">
+
+<!--Nombre de mi Aplicacion Aparece al inicio-->
+<name>Ajax</name>
+<!--Descripcion de mi Aplicacion Aparece al inicio-->
+<description>
+Ajax - Sample
+</description>
+<!--Autor  de mi Aplicacion Aparece al inicio-->
+<author href="http://example.com" email="griselda.gomez.mondragon@gmail.com">
+Griselda Gomez M
+</author>
+
+
+<access origin="*" /> <!--Permiso a la aplicacion para solicitar de otro lado por ejemplo a php y mysql-->
+<content src="index.html" /> <!--Primer pagina que se carga--> 
+<icon src="icon.png"/> <!--Icono de tu tel 80x80-->
+<gap:splash src="splash.jpg" /> <!--antes de cargar index este se vera splash screnn 320x 480-->
+</widget>
