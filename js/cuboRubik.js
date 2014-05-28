@@ -596,9 +596,13 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 			});
 			$(contenedor).children(".cara").touchend(function(evento) {
 				evento.preventDefault();
+				alert(123);
 				if (evento.originalEvent.touches.length == 0) {
+					alert(456);
 					eventoSoltarRotacion.call(this, evento.originalEvent.changedTouches[0]);
+					alert(789);
 					eventoSoltarCara.call(this, evento.originalEvent.changedTouches[0]);
+					alert(0);
 				} else if (evento.originalEvent.touches.length == 1)
 					eventoTocarRotacion.call(this, evento.originalEvent.touches[0]);
 			});
