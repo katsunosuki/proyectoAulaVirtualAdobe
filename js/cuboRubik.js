@@ -201,7 +201,8 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 	}
 	
 	var seleccionar = function(evento) {
-		$("#log").html("eventoTocarCara " + evento.clientX);
+		$("#log").html("seleccionar " + evento.clientX);
+		return;
 		moverXCara = evento.clientX;
 		moverYCara = evento.clientY;
 		
@@ -514,11 +515,11 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 	var eventoTocarCara = function(evento) {
 		$("#log").html("eventoTocarCara " + evento.clientX);
 		if (!bloqueo2 && !bloqueo) {
-			//seleccionar.call(this, evento);
+			seleccionar.call(this, evento);
 			/*if (typeof(evento.clientX) == "number")
 				$('.cara[cara="' + $(this).attr('cara') + '"]').not(this).trigger(('ontouchstart' in window) ? "touchstart" : "mousedown");*/
-			//moverCara = true;
-			//mover = false;
+			moverCara = true;
+			mover = false;
 		}
 	}
 	
