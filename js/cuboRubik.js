@@ -257,7 +257,7 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 		});
 		if (desarrollo)
 			$(contenedor).children(".rotar2X").aplicaEstilo('background-color', 'gold');
-		//return;//
+		return;//
 		$(contenedor).children(".cara:not(.seleccion1, .seleccion2, .rotar1Y)").each(function() {
 			var matris2 = matrisArreglo($(this).aplicaEstilo('transform'));
 			if (matris[13] == borde2 || matris[13] == -borde2)
