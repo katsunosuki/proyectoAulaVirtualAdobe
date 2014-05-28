@@ -202,7 +202,7 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 	
 	var seleccionar = function(evento) {
 		$("#log").html("seleccionar " + evento.clientX);
-		return;
+		
 		moverXCara = evento.clientX;
 		moverYCara = evento.clientY;
 		
