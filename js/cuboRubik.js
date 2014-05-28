@@ -213,7 +213,7 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 		$(this).addClass("seleccion1");
 		if (desarrollo)
 			$(contenedor).children(".seleccion1").aplicaEstilo('background-color', "green");
-		//
+		return;//
 		$(contenedor).children(".cara:not(.seleccion1)").filter(function() {
 			var matris2 = matrisArreglo($(this).aplicaEstilo('transform'));
 			if ((matris[12] == matris2[12] && matris[13] == matris2[13] && (matris[14] == borde || matris[14] == -borde) && (matris2[14] == borde || matris2[14] == -borde))
