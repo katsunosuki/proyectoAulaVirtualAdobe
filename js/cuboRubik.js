@@ -199,6 +199,7 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 	}
 	
 	var seleccionar = function(evento) {
+		$("#log").html("eventoTocarCara " + evento.clientX);
 		moverXCara = evento.clientX;
 		moverYCara = evento.clientY;
 		
@@ -509,10 +510,11 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 	}
 	
 	var eventoTocarCara = function(evento) {
+		$("#log").html("eventoTocarCara " + evento.clientX);
 		if (!bloqueo2 && !bloqueo) {
 			seleccionar.call(this, evento);
-			if (typeof(evento.clientX) == "number")
-				$('.cara[cara="' + $(this).attr('cara') + '"]').not(this).trigger(('ontouchstart' in window) ? "touchstart" : "mousedown");
+			/*if (typeof(evento.clientX) == "number")
+				$('.cara[cara="' + $(this).attr('cara') + '"]').not(this).trigger(('ontouchstart' in window) ? "touchstart" : "mousedown");*/
 			moverCara = true;
 			mover = false;
 		}
@@ -578,6 +580,7 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 					moverCara = false;
 					distanciaS = distancia({x1: evento.originalEvent.touches[0].clientX, y1: evento.originalEvent.touches[0].clientY, x2: evento.originalEvent.touches[1].clientX, y2: evento.originalEvent.touches[1].clientY});
 				}
+				$("#log").html("touchstart termino");
 			});
 			/*$(rotacion).touchmove(function(evento) {
 				evento.preventDefault();
