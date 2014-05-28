@@ -19,6 +19,8 @@
 			// device APIs are available
 			//
 			function onDeviceReady() {
+				alert("onDeviceReady");
+				
 				// Now safe to use device APIs
 				document.addEventListener("pause", onPause, false);
 				document.addEventListener("resign", onResign, false);//iOS
@@ -119,7 +121,6 @@
 			}
 		</script>
 	</head>
-	<body>
-		
+	<body onload="onLoad()">
 	</body>
 </html>
