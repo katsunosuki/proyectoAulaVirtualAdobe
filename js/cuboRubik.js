@@ -556,7 +556,7 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 	
 	var creaEventos = function() {
 		if ('ontouchstart' in window) {
-			$(rotacion).touchstart(function(evento) {
+			/*$(rotacion).touchstart(function(evento) {
 				evento.preventDefault();
 				if (evento.originalEvent.touches.length == 1)
 					eventoTocarRotacion.call(this, evento.originalEvent.touches[0]);
@@ -565,7 +565,7 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 					moverCara = false;
 					distanciaS = distancia({x1: evento.originalEvent.touches[0].clientX, y1: evento.originalEvent.touches[0].clientY, x2: evento.originalEvent.touches[1].clientX, y2: evento.originalEvent.touches[1].clientY});
 				}
-			});	
+			});*/
 			$(contenedor).children(".cara").touchstart(function(evento) {
 				evento.preventDefault();
 				if (typeof(evento.originalEvent) == "undefined")
@@ -578,22 +578,22 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 					distanciaS = distancia({x1: evento.originalEvent.touches[0].clientX, y1: evento.originalEvent.touches[0].clientY, x2: evento.originalEvent.touches[1].clientX, y2: evento.originalEvent.touches[1].clientY});
 				}
 			});
-			$(rotacion).touchmove(function(evento) {
+			/*$(rotacion).touchmove(function(evento) {
 				evento.preventDefault();
 				eventoTouchMove.call(this, evento);
-			});
+			});*/
 			$(contenedor).children(".cara").touchmove(function(evento) {
 				evento.preventDefault();
 				eventoTouchMove.call(this, evento);
 			});
-			$(rotacion).touchend(function(evento) {
+			/*$(rotacion).touchend(function(evento) {
 				evento.preventDefault();
 				if (evento.originalEvent.touches.length == 0) {
 					eventoSoltarCara.call(this, evento.originalEvent.changedTouches[0]);
 					eventoSoltarRotacion.call(this, evento.originalEvent.changedTouches[0]);
 				} else if (evento.originalEvent.touches.length == 1)
 					eventoTocarRotacion.call(this, evento.originalEvent.touches[0]);
-			});
+			});*/
 			$(contenedor).children(".cara").touchend(function(evento) {
 				evento.preventDefault();
 				alert(123);
