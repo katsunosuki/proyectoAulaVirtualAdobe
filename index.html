@@ -10,16 +10,22 @@
 		<script type="text/javascript" src="js/jquery.mobile-1.4.2.min.js"></script>
 		<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
 		<script type="text/javascript" charset="utf-8">
+			$(document).ready(function() {
+				$("#log").append("ready");
+				onLoad();
+			});
+			
 			// Wait for device API libraries to load
 			//
 			function onLoad() {
+				$("#log").append("<br/>onLoad");
 				document.addEventListener("deviceready", onDeviceReady, false);
 			}
 			
 			// device APIs are available
 			//
 			function onDeviceReady() {
-				alert("onDeviceReady");
+				$("#log").append("<br/>onDeviceReady");
 				
 				// Now safe to use device APIs
 				document.addEventListener("pause", onPause, false);
@@ -33,8 +39,6 @@
 				document.addEventListener("endcallbutton", onEndCallKeyDown, false);
 				document.addEventListener("volumedownbutton", onVolumeDownKeyDown, false);
 				document.addEventListener("volumeupbutton", onVolumeUpKeyDown, false);
-				
-				navigator.notification.vibrate(500);
 				
 				/*// capture callback
 				var captureSuccess = function(mediaFiles) {
@@ -57,70 +61,72 @@
 			// Handle the pause event
 			//
 			function onPause() {
-				alert("onPause");
+				$("#log").append("<br/>onPause");
 			}
 			
 			// Handle the resign event
 			//
 			function onResign() {
-				alert("onResign");
+				$("#log").append("<br/>onResign");
 			}
 			
 			// Handle the resume event
 			//
 			function onResume() {
-				alert("onResume");
+				$("#log").append("<br/>onResume");
 			}
 			
 			// Handle the active event
 			//
 			function onActive() {
-				alert("onActive");
+				$("#log").append("<br/>onActive");
 			}
 			
 			// Handle the back button
 			//
 			function onBackKeyDown() {
-				alert("onBackKeyDown");
+				$("#log").append("<br/>onBackKeyDown");
 			}
 			
 			// Handle the menu button
 			//
 			function onMenuKeyDown() {
-				alert("onMenuKeyDown");
+				$("#log").append("<br/>onMenuKeyDown");
+				navigator.notification.vibrate(1000);
 			}
 			
 			// Handle the search button
 			//
 			function onSearchKeyDown() {
-				alert("onSearchKeyDown");
+				$("#log").append("<br/>onSearchKeyDown");
 			}
 			
 			// Handle the start call button
 			//
 			function onStartCallKeyDown() {
-				alert("onStartCallKeyDown");
+				$("#log").append("<br/>onStartCallKeyDown");
 			}
 			
 			// Handle the end call button
 			//
 			function onEndCallKeyDown() {
-				alert("onEndCallKeyDown");
+				$("#log").append("<br/>onEndCallKeyDown");
 			}
 			
 			// Handle the volume down button
 			//
 			function onVolumeDownKeyDown() {
-				alert("onVolumeDownKeyDown");
+				$("#log").append("<br/>onVolumeDownKeyDown");
 			}
 			
 			// Handle the volume up button
 			//
 			function onVolumeUpKeyDown() {
-				alert("onVolumeUpKeyDown");
+				$("#log").append("<br/>onVolumeUpKeyDown");
 			}
 		</script>
 	</head>
-	<body onload="onLoad()">
+	<body>
+		<div id="log"></div>
 	</body>
 </html>

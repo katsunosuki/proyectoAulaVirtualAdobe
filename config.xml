@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<widget xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" version="1.0.0">
+	<name>Cubo Rubik NARB</name>
+	<description>Juego de rubik.</description>
+	<author href="https://github.com/katsunosuki/proyectoAulaVirtualAdobe" email="spawn_s@msn.com">NARB</author>
+	<gap:platform name="ios"/>
+	<gap:platform name="android"/>
+	<gap:platform name="winphone"/>
+	<gap:plugin name="org.apache.cordova.vibration"/>
+</widget>
