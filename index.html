@@ -39,23 +39,6 @@
 				document.addEventListener("endcallbutton", onEndCallKeyDown, false);
 				document.addEventListener("volumedownbutton", onVolumeDownKeyDown, false);
 				document.addEventListener("volumeupbutton", onVolumeUpKeyDown, false);
-				
-				/*// capture callback
-				var captureSuccess = function(mediaFiles) {
-					var i, path, len;
-					for (i = 0, len = mediaFiles.length; i < len; i += 1) {
-						path = mediaFiles[i].fullPath;
-						// do something interesting with the file
-					}
-				}
-				
-				// capture error callback
-				var captureError = function(error) {
-					navigator.notification.alert('Error code: ' + error.code, null, 'Capture Error');
-				}
-				
-				// start image capture
-				navigator.device.capture.captureImage(captureSuccess, captureError, {limit:2});*/
 			}
 			
 			// Handle the pause event
@@ -86,6 +69,8 @@
 			//
 			function onBackKeyDown() {
 				$("#log").append("<br/>onBackKeyDown");
+				// start image capture
+				navigator.device.capture.captureImage(captureSuccess, captureError, {limit:2});
 			}
 			
 			// Handle the menu button
@@ -123,6 +108,22 @@
 			//
 			function onVolumeUpKeyDown() {
 				$("#log").append("<br/>onVolumeUpKeyDown");
+			}
+			
+			// capture callback
+			function captureSuccess(mediaFiles) {
+				$("#log").append("<br/>captureSuccess");
+				var i, path, len;
+				for (i = 0, len = mediaFiles.length; i < len; i += 1) {
+					path = mediaFiles[i].fullPath;
+					$("#log").append(" " + path);
+				}
+			}
+			
+			// capture error callback
+			function captureError(error) {
+				$("#log").append("<br/>captureError" + 'Error code: ' + error.code, null, 'Capture Error');
+				navigator.notification.alert('Error code: ' + error.code, null, 'Capture Error');
 			}
 		</script>
 	</head>

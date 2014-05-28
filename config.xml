@@ -7,4 +7,5 @@
 	<gap:platform name="android"/>
 	<gap:platform name="winphone"/>
 	<gap:plugin name="org.apache.cordova.vibration"/>
+	<gap:plugin name="org.apache.cordova.media-capture"/>
 </widget>
