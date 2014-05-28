@@ -79,6 +79,8 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 	
 	var matris45 = "";
 	
+	var caraEventoTouchStart;
+	
 	var matrisArreglo = function(matris) {
 		var tmp = matris.substring((matris.indexOf('(') + 1), matris.indexOf(')')).split(", "); //x 12 y 13 z 14
 		for (var i = 0; i < tmp.length; i++) {
@@ -571,7 +573,7 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 			$(contenedor).children(".cara").touchstart(function(evento) {
 				evento.preventDefault();
 				$("#log").html("touchstart " + evento.originalEvent.touches.length);
-				if (typeof(evento.originalEvent) == "undefined")
+				/*if (typeof(evento.originalEvent) == "undefined")
 					eventoTocarCara.call(this, {clientX: "0", clientY: "0"});
 				else if (evento.originalEvent.touches.length == 1)
 					eventoTocarCara.call(this, evento.originalEvent.touches[0]);
@@ -579,7 +581,8 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 					mover = false;
 					moverCara = false;
 					distanciaS = distancia({x1: evento.originalEvent.touches[0].clientX, y1: evento.originalEvent.touches[0].clientY, x2: evento.originalEvent.touches[1].clientX, y2: evento.originalEvent.touches[1].clientY});
-				}
+				}*/
+				caraEventoTouchStart = evento;
 				$("#log").html("touchstart termino " + evento.originalEvent.touches[0].clientX);
 			});
 			/*$(rotacion).touchmove(function(evento) {
