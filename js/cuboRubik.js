@@ -568,7 +568,8 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 			});*/
 			$(contenedor).children(".cara").touchstart(function(evento) {
 				evento.preventDefault();
-				if (typeof(evento.originalEvent) == "undefined")
+				$("#log").html("touchstart");
+				/*if (typeof(evento.originalEvent) == "undefined")
 					eventoTocarCara.call(this, {clientX: "0", clientY: "0"});
 				else if (evento.originalEvent.touches.length == 1)
 					eventoTocarCara.call(this, evento.originalEvent.touches[0]);
@@ -576,7 +577,7 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 					mover = false;
 					moverCara = false;
 					distanciaS = distancia({x1: evento.originalEvent.touches[0].clientX, y1: evento.originalEvent.touches[0].clientY, x2: evento.originalEvent.touches[1].clientX, y2: evento.originalEvent.touches[1].clientY});
-				}
+				}*/
 			});
 			/*$(rotacion).touchmove(function(evento) {
 				evento.preventDefault();
@@ -584,7 +585,8 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 			});*/
 			$(contenedor).children(".cara").touchmove(function(evento) {
 				evento.preventDefault();
-				eventoTouchMove.call(this, evento);
+				$("#log").html("touchmove");
+				//eventoTouchMove.call(this, evento);
 			});
 			/*$(rotacion).touchend(function(evento) {
 				evento.preventDefault();
@@ -596,7 +598,7 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 			});*/
 			$(contenedor).children(".cara").touchend(function(evento) {
 				evento.preventDefault();
-				alert(123);
+				$("#log").html("touchend");
 				/*if (evento.originalEvent.touches.length == 0) {
 					alert(456);
 					eventoSoltarRotacion.call(this, evento.originalEvent.changedTouches[0]);
