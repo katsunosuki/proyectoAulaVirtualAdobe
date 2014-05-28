@@ -569,7 +569,7 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 			$(contenedor).children(".cara").touchstart(function(evento) {
 				evento.preventDefault();
 				$("#log").html("touchstart " + evento.originalEvent.touches.length);
-				/*if (typeof(evento.originalEvent) == "undefined")
+				if (typeof(evento.originalEvent) == "undefined")
 					eventoTocarCara.call(this, {clientX: "0", clientY: "0"});
 				else if (evento.originalEvent.touches.length == 1)
 					eventoTocarCara.call(this, evento.originalEvent.touches[0]);
@@ -577,7 +577,7 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 					mover = false;
 					moverCara = false;
 					distanciaS = distancia({x1: evento.originalEvent.touches[0].clientX, y1: evento.originalEvent.touches[0].clientY, x2: evento.originalEvent.touches[1].clientX, y2: evento.originalEvent.touches[1].clientY});
-				}*/
+				}
 			});
 			/*$(rotacion).touchmove(function(evento) {
 				evento.preventDefault();
