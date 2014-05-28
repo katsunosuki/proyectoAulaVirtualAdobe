@@ -1,0 +1,125 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="UTF-8"/>
+		<meta name="viewport" content="width=device-width; height=device-height; initial-scale=1.0; minimum-scale=1.0; maximum-scale=1.0; user-scalable=no;"/>
+		<title>NARB</title>
+		<link href="css/jquery.mobile-1.4.2.min.css" rel="stylesheet"/>
+		<script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
+		<script type="text/javascript" src="js/jquery.mousewheel.min.js"></script>
+		<script type="text/javascript" src="js/jquery.mobile-1.4.2.min.js"></script>
+		<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+		<script type="text/javascript" charset="utf-8">
+			// Wait for device API libraries to load
+			//
+			function onLoad() {
+				document.addEventListener("deviceready", onDeviceReady, false);
+			}
+			
+			// device APIs are available
+			//
+			function onDeviceReady() {
+				// Now safe to use device APIs
+				document.addEventListener("pause", onPause, false);
+				document.addEventListener("resign", onResign, false);//iOS
+				document.addEventListener("resume", onResume, false);
+				document.addEventListener("active", onActive, false);//iOS
+				document.addEventListener("backbutton", onBackKeyDown, false);
+				document.addEventListener("menubutton", onMenuKeyDown, false);
+				document.addEventListener("searchbutton", onSearchKeyDown, false);
+				document.addEventListener("startcallbutton", onStartCallKeyDown, false);
+				document.addEventListener("endcallbutton", onEndCallKeyDown, false);
+				document.addEventListener("volumedownbutton", onVolumeDownKeyDown, false);
+				document.addEventListener("volumeupbutton", onVolumeUpKeyDown, false);
+				
+				navigator.notification.vibrate(500);
+				
+				/*// capture callback
+				var captureSuccess = function(mediaFiles) {
+					var i, path, len;
+					for (i = 0, len = mediaFiles.length; i < len; i += 1) {
+						path = mediaFiles[i].fullPath;
+						// do something interesting with the file
+					}
+				}
+				
+				// capture error callback
+				var captureError = function(error) {
+					navigator.notification.alert('Error code: ' + error.code, null, 'Capture Error');
+				}
+				
+				// start image capture
+				navigator.device.capture.captureImage(captureSuccess, captureError, {limit:2});*/
+			}
+			
+			// Handle the pause event
+			//
+			function onPause() {
+				alert("onPause");
+			}
+			
+			// Handle the resign event
+			//
+			function onResign() {
+				alert("onResign");
+			}
+			
+			// Handle the resume event
+			//
+			function onResume() {
+				alert("onResume");
+			}
+			
+			// Handle the active event
+			//
+			function onActive() {
+				alert("onActive");
+			}
+			
+			// Handle the back button
+			//
+			function onBackKeyDown() {
+				alert("onBackKeyDown");
+			}
+			
+			// Handle the menu button
+			//
+			function onMenuKeyDown() {
+				alert("onMenuKeyDown");
+			}
+			
+			// Handle the search button
+			//
+			function onSearchKeyDown() {
+				alert("onSearchKeyDown");
+			}
+			
+			// Handle the start call button
+			//
+			function onStartCallKeyDown() {
+				alert("onStartCallKeyDown");
+			}
+			
+			// Handle the end call button
+			//
+			function onEndCallKeyDown() {
+				alert("onEndCallKeyDown");
+			}
+			
+			// Handle the volume down button
+			//
+			function onVolumeDownKeyDown() {
+				alert("onVolumeDownKeyDown");
+			}
+			
+			// Handle the volume up button
+			//
+			function onVolumeUpKeyDown() {
+				alert("onVolumeUpKeyDown");
+			}
+		</script>
+	</head>
+	<body>
+		
+	</body>
+</html>
