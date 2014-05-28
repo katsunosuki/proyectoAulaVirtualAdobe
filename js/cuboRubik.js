@@ -580,7 +580,7 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 					moverCara = false;
 					distanciaS = distancia({x1: evento.originalEvent.touches[0].clientX, y1: evento.originalEvent.touches[0].clientY, x2: evento.originalEvent.touches[1].clientX, y2: evento.originalEvent.touches[1].clientY});
 				}
-				$("#log").html("touchstart termino");
+				$("#log").html("touchstart termino " + evento.originalEvent.touches[0].clientX);
 			});
 			/*$(rotacion).touchmove(function(evento) {
 				evento.preventDefault();
