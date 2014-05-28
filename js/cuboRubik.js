@@ -273,7 +273,7 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 		}).addClass("rotar2Y");
 		if (desarrollo)
 			$(contenedor).children(".rotar2Y").aplicaEstilo('background-color', 'darkkhaki');
-		//
+		return;//
 		$(contenedor).children(".cara").filter(function() {
 			var matris2 = matrisArreglo($(this).aplicaEstilo('transform'));
 			if (matris[14] == borde2 || matris[14] == -borde2)
@@ -284,7 +284,7 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 		}).addClass("rotar2Z");
 		if (desarrollo)
 			$(contenedor).children(".rotar2Z").aplicaEstilo('background-color', 'darkorange');
-		return;//
+		//
 		$(contenedor).children(".rotar1X, .rotar1Y, .rotar1Z").filter(function() {
 			var matris2 = matrisArreglo($(this).aplicaEstilo('transform'));
 			if ((matris2[12] == matris[12] && (matris[12] == borde || matris[12] == -borde) && (matris2[13] == matris[13]))
