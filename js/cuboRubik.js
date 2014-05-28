@@ -214,96 +214,87 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 		if (desarrollo)
 			$(contenedor).children(".seleccion1").aplicaEstilo('background-color', "green");
 		//
-		$(contenedor).children(".cara:not(.seleccion1)").filter(function() {
+		$(contenedor).children(".cara:not(.seleccion1)").each(function() {
 			var matris2 = matrisArreglo($(this).aplicaEstilo('transform'));
 			if ((matris[12] == matris2[12] && matris[13] == matris2[13] && (matris[14] == borde || matris[14] == -borde) && (matris2[14] == borde || matris2[14] == -borde))
 			|| (matris[12] == matris2[12] && matris[14] == matris2[14] && (matris[13] == borde || matris[13] == -borde) && (matris2[13] == borde || matris2[13] == -borde))
 			|| (matris[13] == matris2[13] && matris[14] == matris2[14] && (matris[12] == borde || matris[12] == -borde) && (matris2[12] == borde || matris2[12] == -borde)))
-				return true;
-			return false;
-		}).addClass("seleccion2");
+				$(this).addClass("seleccion2");
+		});
 		if (desarrollo)
 			$(contenedor).children(".seleccion2").aplicaEstilo('background-color', 'red');
 		//
-		$(contenedor).children(".cara:not(.seleccion1, .seleccion2)").filter(function() {
+		$(contenedor).children(".cara:not(.seleccion1, .seleccion2)").each(function() {
 			var matris2 = matrisArreglo($(this).aplicaEstilo('transform'));
 			if (matris2[12] == matris[12] && matris[12] != borde && matris[12] != -borde)
-				return true;
-			return false;
-		}).addClass("rotar1X");
+				$(this).addClass("rotar1X");
+		});
 		if (desarrollo)
 			$(contenedor).children(".rotar1X").aplicaEstilo('background-color', 'yellow');
 		//
-		$(contenedor).children(".cara:not(.seleccion1, .seleccion2)").filter(function() {
+		$(contenedor).children(".cara:not(.seleccion1, .seleccion2, .rotar1X)").each(function() {
 			var matris2 = matrisArreglo($(this).aplicaEstilo('transform'));
 			if (matris2[13] == matris[13] && matris[13] != borde && matris[13] != -borde)
-				return true;
-			return false;
-		}).addClass("rotar1Y");
+				$(this).addClass("rotar1Y");
+		});
 		if (desarrollo)
 			$(contenedor).children(".rotar1Y").aplicaEstilo('background-color', 'khaki');
 		//
-		$(contenedor).children(".cara:not(.seleccion1, .seleccion2)").filter(function() {
+		$(contenedor).children(".cara:not(.seleccion1, .seleccion2, .rotar1X, .rotar1Y)").each(function() {
 			var matris2 = matrisArreglo($(this).aplicaEstilo('transform'));
 			if (matris2[14] == matris[14] && matris[14] != borde && matris[14] != -borde)
-				return true;
-			return false;
-		}).addClass("rotar1Z");
+				$(this).addClass("rotar1Z");
+		});
 		if (desarrollo)
 			$(contenedor).children(".rotar1Z").aplicaEstilo('background-color', 'orange');
 		//
-		$(contenedor).children(".cara").filter(function() {
+		$(contenedor).children(".cara:not(.seleccion1, .seleccion2, .rotar1X)").each(function() {
 			var matris2 = matrisArreglo($(this).aplicaEstilo('transform'));
 			if (matris[12] == borde2 || matris[12] == -borde2)
 				if ((matris2[12] == borde) || (matris2[12] == -borde))
 					if ((matris[12] <= 0 && matris2[12] <= 0) || (matris[12] >= 0 && matris2[12] >= 0))
-						return true;
-			return false;
-		}).addClass("rotar2X");
+						$(this).addClass("rotar2X");
+		});
 		if (desarrollo)
 			$(contenedor).children(".rotar2X").aplicaEstilo('background-color', 'gold');
-		//
-		$(contenedor).children(".cara").filter(function() {
+		//return;//
+		$(contenedor).children(".cara:not(.seleccion1, .seleccion2, .rotar1Y)").each(function() {
 			var matris2 = matrisArreglo($(this).aplicaEstilo('transform'));
 			if (matris[13] == borde2 || matris[13] == -borde2)
 				if ((matris2[13] == borde) || (matris2[13] == -borde))
 					if ((matris[13] <= 0 && matris2[13] <= 0) || (matris[13] >= 0 && matris2[13] >= 0))
-						return true;
-			return false;
-		}).addClass("rotar2Y");
+						$(this).addClass("rotar2Y");
+		});
 		if (desarrollo)
 			$(contenedor).children(".rotar2Y").aplicaEstilo('background-color', 'darkkhaki');
-		return;//
-		$(contenedor).children(".cara").filter(function() {
+		//
+		$(contenedor).children(".cara:not(.seleccion1, .seleccion2, .rotar1Z)").each(function() {
 			var matris2 = matrisArreglo($(this).aplicaEstilo('transform'));
 			if (matris[14] == borde2 || matris[14] == -borde2)
 				if ((matris2[14] == borde) || (matris2[14] == -borde))
 					if ((matris[14] <= 0 && matris2[14] <= 0) || (matris[14] >= 0 && matris2[14] >= 0))
-						return true;
-			return false;
-		}).addClass("rotar2Z");
+						$(this).addClass("rotar2Z");
+		});
 		if (desarrollo)
 			$(contenedor).children(".rotar2Z").aplicaEstilo('background-color', 'darkorange');
 		//
-		$(contenedor).children(".rotar1X, .rotar1Y, .rotar1Z").filter(function() {
+		$(contenedor).children(".rotar1X, .rotar1Y, .rotar1Z").not(".seleccion1, .seleccion2, .rotar2X, .rotar2Y, .rotar2Z").each(function() {
 			var matris2 = matrisArreglo($(this).aplicaEstilo('transform'));
 			if ((matris2[12] == matris[12] && (matris[12] == borde || matris[12] == -borde) && (matris2[13] == matris[13]))
 			|| (matris2[13] == matris[13] && (matris[13] == borde || matris[13] == -borde) && (matris2[14] == matris[14]))
 			|| (matris2[14] == matris[14] && (matris[14] == borde || matris[14] == -borde) && (matris2[13] == matris[13])))
-				return true;
-			return false;
-		}).addClass("direccion1");
+				$(this).addClass("direccion1");
+		});
 		if (desarrollo)
 			$(contenedor).children(".direccion1").aplicaEstilo('background-color', 'white');
 		//
-		$(contenedor).children(".rotar1X, .rotar1Y, .rotar1Z").filter(function() {
+		$(contenedor).children(".rotar1X, .rotar1Y, .rotar1Z").not(".seleccion1, .seleccion2, .rotar2X, .rotar2Y, .rotar2Z").each(function() {
 			var matris2 = matrisArreglo($(this).aplicaEstilo('transform'));
 			if ((matris2[12] == matris[12] && (matris[12] == borde || matris[12] == -borde) && (matris2[14] == matris[14]))
 			|| (matris2[13] == matris[13] && (matris[13] == borde || matris[13] == -borde) && (matris2[12] == matris[12]))
 			|| (matris2[14] == matris[14] && (matris[14] == borde || matris[14] == -borde) && (matris2[12] == matris[12])))
-				return true;
-			return false;
-		}).addClass("direccion2");
+				$(this).addClass("direccion2");
+		});
 		if (desarrollo)
 			$(contenedor).children(".direccion2").aplicaEstilo('background-color', 'black');
 		//
