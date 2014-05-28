@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="UTF-8"/>
+		<meta name="viewport" content="width=device-width; height=device-height; initial-scale=1.0; minimum-scale=1.0; maximum-scale=1.0; user-scalable=no;"/>
+		<title>NARB</title>
+		<link href="css/jquery.mobile-1.4.2.min.css" rel="stylesheet"/>
+		<script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
+		<script type="text/javascript" src="js/jquery.mousewheel.min.js"></script>
+		<script type="text/javascript" src="js/jquery.mobile-1.4.2.min.js"></script>
+		<script type="text/javascript" src="js/cuboRubik.js"></script>
+		<script>
+			var nfps = 0;
+			var ifps1;
+			var ifps2;
+			function iniciafps() {
+				ifps1 = setInterval(function() { document.getElementById("fps").innerHTML = nfps.toString(); nfps = 0; }, 1000);
+				ifps2 = setInterval(function() { nfps++; }, 1);
+			}
+			function terminafps() {
+				clearInterval(ifps2);
+				clearInterval(ifps1);
+			}
+			
+			var rubik = Array();
+			var memoria = 1;
+			
+			$(document).ready(function() {
+				rubik.push(new Rubik($("#cubo"), 3, $("#area"), function() {
+					//alert("giro");
+				}, function() {
+					//alert("correcto");
+				}));
+			});
+		</script>
+	</head>
+	<body>
+		<div id="area" style="position: fixed; width: 100%; height: 100%;"></div>
+		<div id="log">?</div>
+		<div style="display: inline-block;">
+			<div id="cubo" style="width: 300px; height: 300px; border: 1px solid black; display: inline-block;"></div>
+		</div>
+		<div style="display: inline-block;">
+			<p id="fps">0</p>
+			<div>
+				<input type="checkbox" onclick="!this.checked ? terminafps() : iniciafps();"/><p>FPS</p>
+			</div>
+			<div>
+				<input type="checkbox" onclick="for (var i = 0; i < rubik.length; i++) rubik[i].perspectiva(this.checked);"/><p>Perspectiva</p>
+			</div>
+			<input type="button" value="Aleatorio" onclick="rubik[0].aleatorio();"/>
+			<input type="button" value="Memoria" onclick="rubik[0].memoria(memoria++);"/>
+			<input type="button" value="Expandir" onclick="rubik[0].expandir(1.5);"/>
+			<input type="button" value="Contraer" onclick="rubik[0].contraer(1.5);"/>
+		<div>
+	</body>
+</html>
