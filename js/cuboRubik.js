@@ -586,7 +586,7 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 			$(contenedor).children(".cara").touchmove(function(evento) {
 				evento.preventDefault();
 				$("#log").html("touchmove " + evento.originalEvent.touches.length);
-				//eventoTouchMove.call(this, evento);
+				eventoTouchMove.call(this, evento);
 			});
 			/*$(rotacion).touchend(function(evento) {
 				evento.preventDefault();
