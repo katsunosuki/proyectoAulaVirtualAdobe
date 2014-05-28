@@ -36,7 +36,7 @@ $.fn.aplicaEstilo = function(nombre, valor, agregar) {
 }
 
 function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, funcionCompletoInicial) {
-	var desarrollo = true;
+	var desarrollo = false;
 	
 	var tamanoContenedor;
 	var contenedor;
@@ -554,7 +554,7 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 	
 	var creaEventos = function() {
 		if ('ontouchstart' in window) {
-			/*$(rotacion).touchstart(function(evento) {
+			$(rotacion).touchstart(function(evento) {
 				evento.preventDefault();
 				if (evento.originalEvent.touches.length == 1)
 					eventoTocarRotacion.call(this, evento.originalEvent.touches[0]);
@@ -563,47 +563,46 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 					moverCara = false;
 					distanciaS = distancia({x1: evento.originalEvent.touches[0].clientX, y1: evento.originalEvent.touches[0].clientY, x2: evento.originalEvent.touches[1].clientX, y2: evento.originalEvent.touches[1].clientY});
 				}
-			});*/
+			});
 			$(contenedor).children(".cara").touchstart(function(evento) {
 				evento.preventDefault();
 				$("#log").html("touchstart " + evento.originalEvent.touches.length);
 				if (typeof(evento.originalEvent) == "undefined") {
-					//eventoTocarCara.call(this, {clientX: "0", clientY: "0"});
+					eventoTocarCara.call(this, {clientX: "0", clientY: "0"});
 				} else if (evento.originalEvent.touches.length == 1) {
 					eventoTocarCara.call(this, evento.originalEvent.touches[0]);
 				} else if (evento.originalEvent.touches.length == 2) {
-					//mover = false;
-					//moverCara = false;
-					//distanciaS = distancia({x1: evento.originalEvent.touches[0].clientX, y1: evento.originalEvent.touches[0].clientY, x2: evento.originalEvent.touches[1].clientX, y2: evento.originalEvent.touches[1].clientY});
+					mover = false;
+					moverCara = false;
+					distanciaS = distancia({x1: evento.originalEvent.touches[0].clientX, y1: evento.originalEvent.touches[0].clientY, x2: evento.originalEvent.touches[1].clientX, y2: evento.originalEvent.touches[1].clientY});
 				}
-				//caraEventoTouchStart = evento;
 				$("#log").html("touchstart termino " + evento.originalEvent.touches[0].clientX);
 			});
-			/*$(rotacion).touchmove(function(evento) {
+			$(rotacion).touchmove(function(evento) {
 				evento.preventDefault();
 				eventoTouchMove.call(this, evento);
-			});*/
+			});
 			$(contenedor).children(".cara").touchmove(function(evento) {
 				evento.preventDefault();
 				$("#log").html("touchmove " + evento.originalEvent.touches.length);
 				eventoTouchMove.call(this, evento);
 			});
-			/*$(rotacion).touchend(function(evento) {
+			$(rotacion).touchend(function(evento) {
 				evento.preventDefault();
 				if (evento.originalEvent.touches.length == 0) {
 					eventoSoltarCara.call(this, evento.originalEvent.changedTouches[0]);
 					eventoSoltarRotacion.call(this, evento.originalEvent.changedTouches[0]);
 				} else if (evento.originalEvent.touches.length == 1)
 					eventoTocarRotacion.call(this, evento.originalEvent.touches[0]);
-			});*/
+			});
 			$(contenedor).children(".cara").touchend(function(evento) {
 				evento.preventDefault();
 				$("#log").html("touchend " + evento.originalEvent.changedTouches.length);
 				if (evento.originalEvent.touches.length == 0) {
 					eventoSoltarRotacion.call(this, evento.originalEvent.changedTouches[0]);
 					eventoSoltarCara.call(this, evento.originalEvent.changedTouches[0]);
-				} /*else if (evento.originalEvent.touches.length == 1)
-					eventoTocarRotacion.call(this, evento.originalEvent.touches[0]);*/
+				} else if (evento.originalEvent.touches.length == 1)
+					eventoTocarRotacion.call(this, evento.originalEvent.touches[0]);
 			});
 		} else {
 			$(rotacion).mousewheel(function(evento) {
