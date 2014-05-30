@@ -117,8 +117,6 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 	}
 	
 	var animar = function(elementos, rotar, valorRotacion) {
-		$(contenedores).attr("bloqueo2", 1);
-		
 		$(contenedor).animate({valor: valorRotacion}, {
 			start: function() {
 				$(elementos).each(function() {
@@ -474,6 +472,7 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 		
 		if (direccion != "") {
 			var valor = Math.floor(Math.random() * 2) ? 90 : -90;
+			$(contenedores).attr("bloqueo2", 1);
 			animar($(contenedores).children(".seleccion1, .seleccion2, .rotar1" + direccion + ", .rotar2" + direccion), direccion, valor);
 		}
 	}
@@ -524,7 +523,7 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 			var elemento = this;
 			setTimeout(function() {
 				seleccionar.call(elemento, evento);
-			}, 100);
+			}, 10);
 			moverCara = true;
 			mover = false;
 		}
@@ -546,10 +545,11 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 	
 	var eventoSoltarCara = function(evento) {
 		if (moverCara) {
+			$(contenedores).attr("bloqueo2", 1);
 			var elemento = this;
 			setTimeout(function() {
 				girar.call(elemento, evento);
-			}, 100);
+			}, 10);
 		}
 	}
 	
