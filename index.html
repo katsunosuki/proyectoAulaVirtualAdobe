@@ -24,7 +24,7 @@
 			}
 			
 			var rubik = Array();
-			var memoria = 1;
+			var memoria = 0;
 			
 			$(document).ready(function() {
 				//$("#log").html("ready");
@@ -36,6 +36,18 @@
 			function onDeviceReady() {
 				//$("#log").html("onDeviceReady");
 				document.addEventListener("menubutton", onMenuKey, false);
+				
+				reiniciar();
+			}
+			
+			function reiniciar() {
+				for (var i = 0; i < rubik.length; i++)
+					rubik[i].eliminaEventos();
+				$("#cubo").html();
+				$("#espejo1").html();
+				
+				rubik = Array();
+				memoria = 1;
 				
 				rubik.push(new Rubik($("#cubo"), 3, $("#area"), rubikGiro, rubikCompleto, rubikEmpezar));
 				rubik.push(new Rubik($("#espejo1"), 3, $("#area"), rubikGiro, rubikCompleto, rubikEmpezar));
@@ -72,15 +84,16 @@
 		</div>
 		<div id="menu" style="position: fixed; left: 0px; top: 0px; width: 100%; height: 100%;" onclick="$('#menu').hide();">
 			<div style="width: 126px;">
-				<input type="checkbox" id="cfps" class="custom" data-mini="true" style="width: 100%;" onclick="!this.checked ? terminafps() : iniciafps();"/>
+				<input type="checkbox" id="cfps" class="custom" data-mini="true" style="width: 100%;" onclick="$('#menu').hide(); !this.checked ? terminafps() : iniciafps();"/>
 				<label for="cfps">FPS</label>
-				<input type="checkbox" id="perspectiva" class="custom" data-mini="true" style="width: 100%;" onclick="for (var i = 0; i < rubik.length; i++) rubik[i].perspectiva(this.checked);"/>
+				<input type="checkbox" id="perspectiva" class="custom" data-mini="true" style="width: 100%;" onclick="$('#menu').hide(); for (var i = 0; i < rubik.length; i++) rubik[i].perspectiva(this.checked);"/>
 				<label for="perspectiva">Perspectiva</label>
-				<a href="#" data-role="button" data-inline="true" data-mini="true" onclick="rubik[0].aleatorio();">Aleatorio</a>
-				<a href="#" data-role="button" data-inline="true" data-mini="true" onclick="rubik[0].memoria(memoria++);">Memoria</a>
-				<a href="#" data-role="button" data-inline="true" data-mini="true" onclick="rubik[0].expandir(1.5);">Expandir</a>
-				<a href="#" data-role="button" data-inline="true" data-mini="true" onclick="rubik[0].contraer(1.5);">Contraer</a>
-				<a href="#" data-role="button" data-inline="true" data-mini="true" onclick="rubik[0].desligarCaras(rubik[1].Contenedor()); rubik[1].desligarCaras(rubik[0].Contenedor());">Separar</a>
+				<a href="#" data-role="button" data-inline="true" data-mini="true" onclick="$('#menu').hide(); ">Reiniciar</a>
+				<a href="#" data-role="button" data-inline="true" data-mini="true" onclick="$('#menu').hide(); rubik[0].aleatorio();">Aleatorio</a>
+				<a href="#" data-role="button" data-inline="true" data-mini="true" onclick="$('#menu').hide(); rubik[0].memoria(memoria++);">Memoria</a>
+				<a href="#" data-role="button" data-inline="true" data-mini="true" onclick="$('#menu').hide(); rubik[0].expandir(1.5);">Expandir</a>
+				<a href="#" data-role="button" data-inline="true" data-mini="true" onclick="$('#menu').hide(); rubik[0].contraer(1.5);">Contraer</a>
+				<a href="#" data-role="button" data-inline="true" data-mini="true" onclick="$('#menu').hide(); rubik[0].desligarCaras(rubik[1].Contenedor()); rubik[1].desligarCaras(rubik[0].Contenedor());">Separar</a>
 			</div>
 		</div>
 	</body>
