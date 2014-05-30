@@ -28,6 +28,8 @@
 			
 			$(document).ready(function() {
 				//$("#log").html("ready");
+				$('#menu').hide();
+				
 				document.addEventListener("deviceready", onDeviceReady, false);
 			});
 			
@@ -43,7 +45,7 @@
 			}
 			
 			function onMenuKey() {
-				//
+				$('#menu').show();
 			}
 			
 			function rubikEmpezar() {
@@ -63,24 +65,23 @@
 	</head>
 	<body>
 		<div id="area" style="position: fixed; width: 100%; height: 100%;"></div>
-		<div id="log">?</div>
+		<div><a href="#" data-role="button" data-inline="true" data-mini="true" onclick="$('#menu').show();">Menu</a> <span id="fps">0</span> <span id="log">?</span></div>
 		<div style="display: inline-block;">
 			<div id="cubo" style="width: 300px; height: 300px; border: 1px solid black; display: inline-block;"></div>
 			<div id="espejo1" style="width: 300px; height: 300px; border: 1px solid black; display: inline-block;"></div>
 		</div>
-		<div style="display: inline-block;">
-			<p id="fps">0</p>
-			<div>
-				<input type="checkbox" onclick="!this.checked ? terminafps() : iniciafps();"/><p>FPS</p>
+		<div id="menu" style="position: fixed; left: 0px; top: 0px; width: 100%; height: 100%;" onclick="$('#menu').hide();">
+			<div style="width: 126px;">
+				<input type="checkbox" id="cfps" class="custom" data-mini="true" style="width: 100%;" onclick="!this.checked ? terminafps() : iniciafps();"/>
+				<label for="cfps">FPS</label>
+				<input type="checkbox" id="perspectiva" class="custom" data-mini="true" style="width: 100%;" onclick="for (var i = 0; i < rubik.length; i++) rubik[i].perspectiva(this.checked);"/>
+				<label for="perspectiva">Perspectiva</label>
+				<a href="#" data-role="button" data-inline="true" data-mini="true" onclick="rubik[0].aleatorio();">Aleatorio</a>
+				<a href="#" data-role="button" data-inline="true" data-mini="true" onclick="rubik[0].memoria(memoria++);">Memoria</a>
+				<a href="#" data-role="button" data-inline="true" data-mini="true" onclick="rubik[0].expandir(1.5);">Expandir</a>
+				<a href="#" data-role="button" data-inline="true" data-mini="true" onclick="rubik[0].contraer(1.5);">Contraer</a>
+				<a href="#" data-role="button" data-inline="true" data-mini="true" onclick="rubik[0].desligarCaras(rubik[1].Contenedor()); rubik[1].desligarCaras(rubik[0].Contenedor());">Separar</a>
 			</div>
-			<div>
-				<input type="checkbox" onclick="for (var i = 0; i < rubik.length; i++) rubik[i].perspectiva(this.checked);"/><p>Perspectiva</p>
-			</div>
-			<input type="button" value="Aleatorio" onclick="rubik[0].aleatorio();"/>
-			<input type="button" value="Memoria" onclick="rubik[0].memoria(memoria++);"/>
-			<input type="button" value="Expandir" onclick="rubik[0].expandir(1.5);"/>
-			<input type="button" value="Contraer" onclick="rubik[0].contraer(1.5);"/>
-			<input type="button" value="Separar" onclick="rubik[0].desligarCaras(rubik[1].Contenedor()); rubik[1].desligarCaras(rubik[0].Contenedor());"/>
-		<div>
+		</div>
 	</body>
 </html>

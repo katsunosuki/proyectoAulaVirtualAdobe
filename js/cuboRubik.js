@@ -117,6 +117,8 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 	}
 	
 	var animar = function(elementos, rotar, valorRotacion) {
+		$(contenedores).attr("bloqueo2", 1);
+		
 		$(contenedor).animate({valor: valorRotacion}, {
 			start: function() {
 				$(elementos).each(function() {
@@ -472,7 +474,6 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 		
 		if (direccion != "") {
 			var valor = Math.floor(Math.random() * 2) ? 90 : -90;
-			$(contenedores).attr("bloqueo2", 1);
 			animar($(contenedores).children(".seleccion1, .seleccion2, .rotar1" + direccion + ", .rotar2" + direccion), direccion, valor);
 		}
 	}
@@ -523,7 +524,7 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 			var elemento = this;
 			setTimeout(function() {
 				seleccionar.call(elemento, evento);
-			}, 10);
+			}, 0);
 			moverCara = true;
 			mover = false;
 		}
@@ -544,12 +545,11 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 	}
 	
 	var eventoSoltarCara = function(evento) {
-		if (moverCara) {
-			$(contenedores).attr("bloqueo2", 1);
+		if (moverCara && !Number($(contenedor).attr("bloqueo2"))) {
 			var elemento = this;
 			setTimeout(function() {
 				girar.call(elemento, evento);
-			}, 10);
+			}, 0);
 		}
 	}
 	
@@ -571,6 +571,7 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 	var creaEventos = function() {
 		if ('ontouchstart' in window) {
 			$(rotacion).touchstart(function(evento) {
+				evento.stopPropagation();
 				evento.preventDefault();
 				//$("#log").html("rotacion touchstart " + evento.originalEvent.touches.length);
 				if (evento.originalEvent.touches.length == 1)
@@ -583,6 +584,7 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 				//$("#log").html("rotacion touchstart " + evento.originalEvent.changedTouches[0].clientX + " " + evento.originalEvent.changedTouches[0].clientY);
 			});
 			$(contenedor).children(".cara").touchstart(function(evento) {
+				evento.stopPropagation();
 				evento.preventDefault();
 				//$("#log").html("cara touchstart " + evento.originalEvent.touches.length);
 				if (evento.originalEvent.touches.length == 1)
@@ -595,18 +597,21 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 				//$("#log").html("cara touchstart " + evento.originalEvent.changedTouches[0].clientX + " " + evento.originalEvent.changedTouches[0].clientY);
 			});
 			$(rotacion).touchmove(function(evento) {
+				evento.stopPropagation();
 				evento.preventDefault();
 				//$("#log").html("rotacion touchmove " + evento.originalEvent.touches.length);
 				eventoTouchMove.call(this, evento);
 				//$("#log").html("rotacion touchmove " + evento.originalEvent.changedTouches[0].clientX + " " + evento.originalEvent.changedTouches[0].clientY);
 			});
 			$(contenedor).children(".cara").touchmove(function(evento) {
+				evento.stopPropagation();
 				evento.preventDefault();
 				//$("#log").html("cara touchmove " + evento.originalEvent.touches.length);
 				eventoTouchMove.call(this, evento);
 				//$("#log").html("cara touchmove " + evento.originalEvent.changedTouches[0].clientX + " " + evento.originalEvent.changedTouches[0].clientY);
 			});
 			$(rotacion).touchend(function(evento) {
+				evento.stopPropagation();
 				evento.preventDefault();
 				//$("#log").html("rotacion touchend " + evento.originalEvent.touches.length);
 				if (evento.originalEvent.touches.length == 0) {
@@ -617,6 +622,7 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 				//$("#log").html("rotacion touchend " + evento.originalEvent.changedTouches[0].clientX + " " + evento.originalEvent.changedTouches[0].clientY);
 			});
 			$(contenedor).children(".cara").touchend(function(evento) {
+				evento.stopPropagation();
 				evento.preventDefault();
 				//$("#log").html("cara touchend " + evento.originalEvent.touches.length);
 				if (evento.originalEvent.touches.length == 0) {
@@ -628,35 +634,43 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 			});
 		} else {
 			$(rotacion).mousewheel(function(evento) {
+				evento.stopPropagation();
 				evento.preventDefault();
 				eventoEscalar.call(this, evento);
 			});
 			$(contenedor).children(".cara").mousewheel(function(evento) {
+				evento.stopPropagation();
 				evento.preventDefault();
 				eventoEscalar.call(this, evento);
 			});
 			$(rotacion).mousedown(function(evento) {
+				evento.stopPropagation();
 				evento.preventDefault();
 				eventoTocarRotacion.call(this, evento);
 			});
 			$(contenedor).children(".cara").mousedown(function(evento) {
+				evento.stopPropagation();
 				evento.preventDefault();
 				eventoTocarCara.call(this, evento);
 			});
 			$(rotacion).mousemove(function(evento) {
+				evento.stopPropagation();
 				evento.preventDefault();
 				eventoMover.call(this, evento);
 			});
 			$(contenedor).children(".cara").mousemove(function(evento) {
+				evento.stopPropagation();
 				evento.preventDefault();
 				eventoMover.call(this, evento);
 			});
 			$(rotacion).mouseup(function(evento) {
+				evento.stopPropagation();
 				evento.preventDefault();
 				eventoSoltarCara.call(this, evento);
 				eventoSoltarRotacion.call(this, evento);
 			});
 			$(contenedor).children(".cara").mouseup(function(evento) {
+				evento.stopPropagation();
 				evento.preventDefault();
 				eventoSoltarRotacion.call(this, evento);
 				eventoSoltarCara.call(this, evento);
