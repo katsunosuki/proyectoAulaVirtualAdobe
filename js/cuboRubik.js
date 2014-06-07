@@ -25,16 +25,6 @@ function puntoMedio(xy) {
 	return {x: ((xy.x1 + xy.x2) / 2), y: ((xy.y1 + xy.y2) / 2)};
 }
 
-$.fn.aplicaEstilo = function(nombre, valor, agregar) {
-	var concatena = false;
-	if (typeof(agregar) == "boolean")
-		concatena = agregar;
-	if (typeof(valor) != "undefined")
-		return $(this).css(nombre, valor).css('-moz-' + nombre, (concatena ? '-moz-' : '') + valor).css('-ms-' + nombre, (concatena ? '-ms-' : '') + valor).css('-o-' + nombre, (concatena ? '-o-' : '') + valor).css('-webkit-' + nombre, (concatena ? '-webkit-' : '') + valor);
-	else
-		return $(this).css(nombre) || $(this).css('-moz-' + nombre) || $(this).css('-ms-' + nombre) || $(this).css('-o-' + nombre) || $(this).css('-webkit-' + nombre);
-}
-
 function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, funcionCompletoInicial, funcionAutoCompletoInicial) {
 	var desarrollo = false;
 	
@@ -76,6 +66,9 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 	var matris45 = "";
 	
 	var contenedores = Array();
+	
+	var giros = Array();
+	var detener = false;
 	
 	var matrisArreglo = function(matris) {
 		if (typeof(matris) != "string")
@@ -133,9 +126,14 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 			complete: function() {
 				this.valor = 0;
 				
+				var caras = {};
+				
 				$(elementos).each(function() {
+					caras[$(this).attr('cara')] = true;
 					$(this).aplicaEstilo('transform', "rotate" + rotar + "(" + valorRotacion + "deg) " + $(this).attr('valorInicial'));
 				});
+				
+				giros.push({'cara': $(".seleccion1").attr('cara'), 'caras': caras, 'rotar': rotar, 'valorRotacion': valorRotacion});
 				
 				limpiaSeleccion();
 				
@@ -186,16 +184,15 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 					setTimeout(function() {
 						if (!Number($(contenedor).attr("bloqueo")))
 							if (typeof(funcionGiro) == "function")
-								funcionGiro();
+								funcionGiro(giros[giros.length - 1]);
 						if (completo)
 							if (typeof(funcionCompleto) == "function")
 								funcionCompleto();
 						if (Number($(contenedor).attr("bloqueo")))
 							if (typeof(funcionAutoCompleto) == "function")
-								funcionAutoCompleto();
+								funcionAutoCompleto(giros);
 						$(contenedores).attr("bloqueo", 0);
 						$(contenedores).attr("bloqueo2", 0);
-						moverCara = false;
 					}, 100);
 			},
 			duration: 500
@@ -478,14 +475,16 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 		}
 	}
 	
-	var automatico = function(valor) {
-		if (Number($(contenedor).attr("bloqueo2")) || Number($(contenedor).attr("bloqueo")) || Number($(contenedor).attr("expandido")))
-			return;
-		$(contenedores).attr("bloqueo", 1);
-		movimientos = valor;
+	var automatico = function(valor, omitirMovimiento) {
+		if (!omitirMovimiento) {
+			if (Number($(contenedor).attr("bloqueo2")) || Number($(contenedor).attr("bloqueo")) || Number($(contenedor).attr("expandido")))
+				return;
+			$(contenedores).attr("bloqueo", 1);
+			movimientos = valor;
+		}
 		if (matris45 != $(contenedor).aplicaEstilo('transform')) {
-			rotarX = -45;
-			rotarY = -45;
+			rotarX += -45;
+			rotarY += -45;
 			escalar = 1;
 			$(contenedor).aplicaEstilo('transition-property', "transform", true).aplicaEstilo('transition-duration', "500ms").aplicaEstilo('transition-timing-function', "linear");
 			$(contenedor).bind("transitionend mozTransitionEnd msTransitionEnd oTransitionEnd webkitTransitionEnd", function(evento) {
@@ -495,12 +494,14 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 				setTimeout(function() {
 					if (matris45 == "")
 						matris45 = $(contenedor).aplicaEstilo('transform');
-					movimientoAleatorio();
+					if (!omitirMovimiento)
+						movimientoAleatorio();
 				}, 500);
 			});
 			refrescar();
 		} else
-			movimientoAleatorio();
+			if (!omitirMovimiento)
+				movimientoAleatorio();
 	}
 	
 	var eventoEscalar = function(evento) {
@@ -545,7 +546,8 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 	}
 	
 	var eventoSoltarCara = function(evento) {
-		if (moverCara && !Number($(contenedor).attr("bloqueo2"))) {
+		if (moverCara) {
+			moverCara = false;
 			var elemento = this;
 			setTimeout(function() {
 				girar.call(elemento, evento);
@@ -573,7 +575,6 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 			$(rotacion).touchstart(function(evento) {
 				evento.stopPropagation();
 				evento.preventDefault();
-				//$("#log").html("rotacion touchstart " + evento.originalEvent.touches.length);
 				if (evento.originalEvent.touches.length == 1)
 					eventoTocarRotacion.call(this, evento.originalEvent.touches[0]);
 				else if (evento.originalEvent.touches.length == 2) {
@@ -581,12 +582,10 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 					moverCara = false;
 					distanciaS = distancia({x1: evento.originalEvent.touches[0].clientX, y1: evento.originalEvent.touches[0].clientY, x2: evento.originalEvent.touches[1].clientX, y2: evento.originalEvent.touches[1].clientY});
 				}
-				//$("#log").html("rotacion touchstart " + evento.originalEvent.changedTouches[0].clientX + " " + evento.originalEvent.changedTouches[0].clientY);
 			});
 			$(contenedor).children(".cara").touchstart(function(evento) {
 				evento.stopPropagation();
 				evento.preventDefault();
-				//$("#log").html("cara touchstart " + evento.originalEvent.touches.length);
 				if (evento.originalEvent.touches.length == 1)
 					eventoTocarCara.call(this, evento.originalEvent.touches[0]);
 				else if (evento.originalEvent.touches.length == 2) {
@@ -594,43 +593,34 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 					mover = false;
 					distanciaS = distancia({x1: evento.originalEvent.touches[0].clientX, y1: evento.originalEvent.touches[0].clientY, x2: evento.originalEvent.touches[1].clientX, y2: evento.originalEvent.touches[1].clientY});
 				}
-				//$("#log").html("cara touchstart " + evento.originalEvent.changedTouches[0].clientX + " " + evento.originalEvent.changedTouches[0].clientY);
 			});
 			$(rotacion).touchmove(function(evento) {
 				evento.stopPropagation();
 				evento.preventDefault();
-				//$("#log").html("rotacion touchmove " + evento.originalEvent.touches.length);
 				eventoTouchMove.call(this, evento);
-				//$("#log").html("rotacion touchmove " + evento.originalEvent.changedTouches[0].clientX + " " + evento.originalEvent.changedTouches[0].clientY);
 			});
 			$(contenedor).children(".cara").touchmove(function(evento) {
 				evento.stopPropagation();
 				evento.preventDefault();
-				//$("#log").html("cara touchmove " + evento.originalEvent.touches.length);
 				eventoTouchMove.call(this, evento);
-				//$("#log").html("cara touchmove " + evento.originalEvent.changedTouches[0].clientX + " " + evento.originalEvent.changedTouches[0].clientY);
 			});
 			$(rotacion).touchend(function(evento) {
 				evento.stopPropagation();
 				evento.preventDefault();
-				//$("#log").html("rotacion touchend " + evento.originalEvent.touches.length);
 				if (evento.originalEvent.touches.length == 0) {
 					eventoSoltarCara.call(this, evento.originalEvent.changedTouches[0]);
 					eventoSoltarRotacion.call(this, evento.originalEvent.changedTouches[0]);
 				} else if (evento.originalEvent.touches.length == 1)
 					eventoTocarRotacion.call(this, evento.originalEvent.touches[0]);
-				//$("#log").html("rotacion touchend " + evento.originalEvent.changedTouches[0].clientX + " " + evento.originalEvent.changedTouches[0].clientY);
 			});
 			$(contenedor).children(".cara").touchend(function(evento) {
 				evento.stopPropagation();
 				evento.preventDefault();
-				//$("#log").html("cara touchend " + evento.originalEvent.touches.length);
 				if (evento.originalEvent.touches.length == 0) {
 					eventoSoltarRotacion.call(this, evento.originalEvent.changedTouches[0]);
 					eventoSoltarCara.call(this, evento.originalEvent.changedTouches[0]);
 				} else if (evento.originalEvent.touches.length == 1)
 					eventoTocarRotacion.call(this, evento.originalEvent.touches[0]);
-				//$("#log").html("cara touchend " + evento.originalEvent.changedTouches[0].clientX + " " + evento.originalEvent.changedTouches[0].clientY);
 			});
 		} else {
 			$(rotacion).mousewheel(function(evento) {
@@ -681,7 +671,7 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 	var crear = function() {
 		var tamanoTmp = (($(area).width() < $(area).height()) ? $(area).width() : $(area).height()) / 8;
 		tamanoContenedor = tamanoTmp * 4;
-		$(area).append('<div style="width: ' + tamanoContenedor + 'px; height: ' + tamanoContenedor + 'px; margin: ' + (tamanoTmp * 2) + 'px; border: 0px; padding: 0px;"></div>');
+		$(area).append('<div style="display: inline-block; width: ' + tamanoContenedor + 'px; height: ' + tamanoContenedor + 'px; margin: 0px; border: 0px; padding: 0px;"></div>');
 		contenedor = $(area).children()[0];
 		contenedores.push(contenedor);
 		$(contenedor).aplicaEstilo('transform-style', "preserve-3d");
@@ -769,10 +759,10 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 	}
 	
 	this.lado = function(valor) {
-		if (Number($(contenedor).attr("bloqueo2")) || Number($(contenedor).attr("bloqueo")))
-			return;
+		//if (Number($(contenedor).attr("bloqueo2")) || Number($(contenedor).attr("bloqueo")))
+		//	return;
 		
-		$(contenedores).attr("bloqueo", 1);
+		//$(contenedores).attr("bloqueo", 1);
 		
 		if (typeof(valor) != "string")
 			valor = "ad";
@@ -801,7 +791,7 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 			$(contenedor).unbind("transitionend mozTransitionEnd msTransitionEnd oTransitionEnd webkitTransitionEnd");
 			$(contenedor).aplicaEstilo('transition-property', "none", true).aplicaEstilo('transition-duration', "none").aplicaEstilo('transition-timing-function', "none");
 			setTimeout(function() {
-				$(contenedores).attr("bloqueo", 0);
+				//$(contenedores).attr("bloqueo", 0);
 			}, 100);
 		});
 		refrescar();
@@ -814,12 +804,14 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 			$(area).aplicaEstilo('perspective-origin:', "").aplicaEstilo('perspective', "");
 	}
 	
-	this.aleatorio = function() {
-		automatico(Math.floor((Math.random() * nCaras) + 1));
+	this.aleatorio = function(omitir) {
+		giros = Array();
+		automatico(Math.floor((Math.random() * nCaras) + 1), omitir);
 	}
 	
-	this.memoria = function(valor) {
-		automatico(valor);
+	this.memoria = function(valor, omitir) {
+		giros = Array();
+		automatico(valor, omitir);
 	}
 	
 	this.expandir = function(valor) {
@@ -885,6 +877,10 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 		});
 	}
 	
+	this.Expandido = function() {
+		return Number($(contenedor).attr("expandido"));
+	}
+	
 	this.Contenedor = function() {
 		return contenedor;
 	}
@@ -913,6 +909,61 @@ function Rubik(areaInicial, numeroInicial, rotacionInicial, funcionGiroInicial, 
 				contenedores.splice(i, 1);
 				break;
 			}
+	}
+	
+	this.Animar = function(elementos, rotar, valorRotacion) {
+		$(contenedores).attr("bloqueo", 1);
+		animar(elementos, rotar, valorRotacion);
+	}
+	
+	this.presentacion = function(funcionPresentacion) {
+		$(contenedor).aplicaEstilo('transition-property', "transform", true).aplicaEstilo('transition-duration', "1500ms").aplicaEstilo('transition-timing-function', "linear");
+		$(contenedor).bind("transitionend mozTransitionEnd msTransitionEnd oTransitionEnd webkitTransitionEnd", function(evento) {
+			evento.stopPropagation();
+			if (!detener) {
+				switch (Math.floor(Math.random() * 4)) {
+					case 0:
+						rotarX += 90;
+						break;
+					case 1:
+						rotarX += -90;
+						break;
+					case 1:
+						rotarY += -90;
+						break;
+					default:
+						rotarY += 90;
+				}
+		
+				refrescar();
+			} else
+				detener = false;
+		});
+		
+		switch (Math.floor(Math.random() * 4)) {
+			case 0:
+				rotarX += 90;
+				break;
+			case 1:
+				rotarX += -90;
+				break;
+			case 1:
+				rotarY += -90;
+				break;
+			default:
+				rotarY += 90;
+		}
+		
+		refrescar();
+	}
+	
+	this.detenerPresentacion = function(funcionPresentacion) {
+		detener = true;
+		$(contenedor).unbind("transitionend mozTransitionEnd msTransitionEnd oTransitionEnd webkitTransitionEnd");
+		$(contenedor).aplicaEstilo('transition-property', "none", true).aplicaEstilo('transition-duration', "none").aplicaEstilo('transition-timing-function', "none");
+		rotarX = 0;
+		rotarY = 0;
+		refrescar();
 	}
 	
 	crear();

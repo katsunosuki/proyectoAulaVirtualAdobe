@@ -5,95 +5,371 @@
 		<meta name="viewport" content="width=device-width; height=device-height; initial-scale=1.0; minimum-scale=1.0; maximum-scale=1.0; user-scalable=no;"/>
 		<title>NARB</title>
 		<link href="css/jquery.mobile-1.4.2.min.css" rel="stylesheet"/>
+		<link href="css/font-awesome.css" rel="stylesheet"/>
+		<style>
+			#mainbtn {
+				position:absolute;
+				top:15px;
+				left:15px;
+				z-index:2;
+			}
+			
+			.circle-container {
+				position: absolute;
+				top:-50px;
+				left:-47px;
+				width: 100px;
+				height: 100px;	
+				z-index:0;
+			}
+			.circle-container a {
+				display: block;
+				overflow: hidden;
+				position: absolute;
+				width: 32px; height: 32px; 
+				margin:50px;
+			}
+			.circle-container i { display: block; width: 100px; }
+			.deg0 {
+				transform: rotate(-25deg) translate(5.75em) rotate(-0deg);   -webkit-transition: all 0.5s ease-out;
+				-moz-transition: all 0.5s ease-out;
+				transition: all 0.5s ease-out;}
+				.deg30 { transform: rotate(-25deg) translate(5.75em) rotate(-30deg);  -webkit-transition: all 0.5s ease-out;
+				-moz-transition: all 0.5s ease-out;
+				transition: all 0.5s ease-out; }
+				.deg60 { transform: rotate(-25deg) translate(5.75em) rotate(-60deg);  -webkit-transition: all 0.5s ease-out;
+				-moz-transition: all 0.5s ease-out;
+				transition: all 0.5s ease-out; }
+				.deg90 { transform: rotate(-25deg) translate(6em) rotate(-90deg);  -webkit-transition: all 0.5s ease-out;
+				-moz-transition: all 0.5s ease-out;
+				transition: all 0.5s ease-out; 
+			}
+			
+			a {
+				text-decoration:none;
+				color:black;
+			}
+			
+			.fa-home:hover {color:tan;}
+			.fa-cog:hover {color:gray;}
+			.fa-comments:hover {color:teal;}
+			.fa-user:hover {color:red;}
+			
+			.open.deg0 { transform: rotate(0deg) translate(5.75em) rotate(-0deg); }
+			.open.deg30 { transform: rotate(30deg) translate(5.75em) rotate(-30deg); }
+			.open.deg60 { transform: rotate(60deg) translate(5.75em) rotate(-60deg); }
+			.open.deg90 { transform: rotate(90deg) translate(6em) rotate(-90deg); }
+		</style>
 		<script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
 		<script type="text/javascript" src="js/jquery.mousewheel.min.js"></script>
 		<script type="text/javascript" src="js/jquery.mobile-1.4.2.min.js"></script>
+		<script type="text/javascript" src="js/prefixfree.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/component.css" />
+		<script src="js/modernizr.custom.js"></script>
 		<script type="text/javascript" src="js/cuboRubik.js"></script>
 		<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
 		<script type="text/javascript" charset="utf-8">
-			var nfps = 0;
-			var ifps1;
-			var ifps2;
-			function iniciafps() {
-				ifps1 = setInterval(function() { document.getElementById("fps").innerHTML = nfps.toString(); nfps = 0; }, 1000);
-				ifps2 = setInterval(function() { nfps++; }, 1);
-			}
-			function terminafps() {
-				clearInterval(ifps2);
-				clearInterval(ifps1);
-			}
-			
 			var rubik = Array();
 			var memoria = 0;
+			var movimientos = Array();
+			var soporteCamara = false;
+			var omitir = false;
+			var indiceMovimiento = 0;
+			var perspectivaValor = false;
 			
-			$(document).ready(function() {
-				//$("#log").html("ready");
-				$('#menu').hide();
-				
-				document.addEventListener("deviceready", onDeviceReady, false);
-			});
-			
-			function onDeviceReady() {
-				//$("#log").html("onDeviceReady");
-				document.addEventListener("menubutton", onMenuKey, false);
-				
-				reiniciar();
+			function detener() {
+				for (var i = 0; i < rubik.length; i++) {
+					rubik[i].detenerPresentacion();
+					rubik[i].contraer(1);
+				}
+				setTimeout(function() {
+					for (var i = 0; i < rubik.length; i++) {
+						switch (i) {
+							case 0:
+								break;
+							case 1:
+								rubik[i].lado("at");
+								break;
+							case 2:
+								rubik[i].lado("iz");
+								break;
+							case 3:
+								rubik[i].lado("de");
+								break;
+							case 4:
+								rubik[i].lado("ar");
+								break;
+							case 5:
+								rubik[i].lado("ab");
+								break;
+							default:
+								rubik[i].lado("at");
+						}
+					}
+					setTimeout(function() {
+						if ($("#q2").val() == "m") {
+							for (var i = 1; i < rubik.length; i++)
+								rubik[i].memoria(memoria, true);
+							rubik[0].memoria(memoria++, false);
+						} else {
+							for (var i = 1; i < rubik.length; i++)
+								rubik[i].aleatorio(true);
+							rubik[0].aleatorio(false);
+						}
+					}, 1000);
+				}, 1000);
 			}
 			
 			function reiniciar() {
 				for (var i = 0; i < rubik.length; i++)
 					rubik[i].eliminaEventos();
-				$("#cubo").html();
-				$("#espejo1").html();
+				
+				var tmp = "";
+				
+				var n = Number($("#q3").val()) + 1;
+				if (n > 6) {
+					n = 6;
+					$("#q3").val("5");
+				}
+				switch (n) {
+					case 1:
+						tmp = '<tr><td id="cubo0" style="width: 100%;"></td></tr>';
+						break;
+					case 2:
+						tmp = '<tr><td id="cubo0" style="width: 50%;"></td><td id="cubo1" style="width: 50%;"></td></tr>';
+						break;
+					case 3:
+						tmp = '<tr><td id="cubo0" style="width: 33%;"></td><td id="cubo1" style="width: 33%;"></td><td id="cubo2" style="width: 33%;"></td></tr>';
+						break;
+					case 4:
+						tmp = '<tr><td id="cubo0" style="width: 50%;"></td><td id="cubo1" style="width: 50%;"></td></tr>';
+						tmp += '<tr><td id="cubo2" style="width: 50%; height: 50%;"></td><td id="cubo3" style="width: 50%; height: 50%;"></td></tr>';
+						break;
+					case 5:
+						tmp = '<tr><td id="cubo0" style="width: 33%;"></td><td id="cubo1" style="width: 33%;"></td><td id="cubo2" style="width: 33%;"></td></tr>';
+						tmp += '<tr><td id="cubo3" style="width: 33%; height: 50%;"></td><td id="cubo4" style="width: 33%; height: 50%;"></td></tr>';
+						break;
+					default:
+						tmp = '<tr><td id="cubo0" style="width: 33%;"></td><td id="cubo1" style="width: 33%;"></td><td id="cubo2" style="width: 33%;"></td></tr>';
+						tmp += '<tr><td id="cubo3" style="width: 33%; height: 50%;"></td><td id="cubo4" style="width: 33%; height: 50%;"></td><td id="cubo5" style="width: 33%; height: 50%;"></td></tr>';
+				}
+				$("#cubos").html(tmp);
 				
 				rubik = Array();
 				memoria = 1;
+				movimientos = Array();
+				omitir = false;
 				
-				rubik.push(new Rubik($("#cubo"), 3, $("#area"), rubikGiro, rubikCompleto, rubikEmpezar));
-				rubik.push(new Rubik($("#espejo1"), 3, $("#area"), rubikGiro, rubikCompleto, rubikEmpezar));
-				rubik[0].ligarCaras(rubik[1].Contenedor());
-				rubik[1].ligarCaras(rubik[0].Contenedor());
-				rubik[1].lado("at");
+				for (var i = 0; i <= Number($("#q3").val()); i++)
+					rubik.push(new Rubik($("#cubo" + i), Number($("#q1").val()), $("#cubos"), rubikGiro, rubikCompleto, rubikEmpezar));
+				for (var i = 0; i < rubik.length; i++)
+					for (var j = 0; j < rubik.length; j++)
+						rubik[i].ligarCaras(rubik[j].Contenedor());
+				for (var i = 0; i < rubik.length; i++) {
+					rubik[i].expandir(0.5);
+					rubik[i].presentacion();
+				}
 			}
 			
-			function onMenuKey() {
-				$('#menu').show();
+			function rubikEmpezar(giros) {
+				if (movimientos.length == 0) {
+					movimientos = giros;
+					indiceMovimiento = movimientos.length - 1;
+					navigator.notification.vibrate(500);
+					alert("Puedes Empezar");
+				}
 			}
 			
-			function rubikEmpezar() {
-				navigator.notification.vibrate(500);
-				alert("Puedes Empezar");
-			}
-			
-			function rubikGiro() {
-				//alert("giro");
+			function rubikGiro(giro) {
+				if ($("#q2").val() == "m") {
+					if (movimientos.length) {
+						if (!omitir) {
+							var fallo = true;
+							for (var cara in movimientos[indiceMovimiento].caras) {
+								if (cara == giro.cara) {
+									if (movimientos[indiceMovimiento].rotar == giro.rotar) {
+										if (movimientos[indiceMovimiento].valorRotacion == -giro.valorRotacion) {
+											fallo = false;
+										}
+									}
+								}
+							}
+							if (fallo) {
+								omitir = true;
+								alert("Movimiento erroneo");
+								var elementos = "";
+								for (var cara in giro.caras) {
+									if (elementos != "")
+										elementos += ", ";
+									elementos += '.cara[cara="' + cara + '"]';
+								}
+								rubik[0].Animar(elementos, giro.rotar, -giro.valorRotacion, true);
+							} else
+								indiceMovimiento--;
+						} else
+							omitir = false;
+					}
+				}
 			}
 			
 			function rubikCompleto() {
+				movimientos = Array();
 				navigator.notification.vibrate(1000);
 				alert("Excelente");
+				detener();
+			}
+			
+			$(document).ready(function() {
+				document.addEventListener("deviceready", onDeviceReady, false);
+				
+				$.fn.aplicaEstilo = function(nombre, valor, agregar) {
+					var concatena = false;
+					if (typeof(agregar) == "boolean")
+						concatena = agregar;
+					if (typeof(valor) != "undefined")
+						return $(this).css(nombre, valor).css('-moz-' + nombre, (concatena ? '-moz-' : '') + valor).css('-ms-' + nombre, (concatena ? '-ms-' : '') + valor).css('-o-' + nombre, (concatena ? '-o-' : '') + valor).css('-webkit-' + nombre, (concatena ? '-webkit-' : '') + valor);
+					else
+						return $(this).css(nombre) || $(this).css('-moz-' + nombre) || $(this).css('-ms-' + nombre) || $(this).css('-o-' + nombre) || $(this).css('-webkit-' + nombre);
+				}
+				
+				navigator.getUserMedia = (navigator.getUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.oGetUserMedia || navigator.webkitGetUserMedia);
+				if (navigator.getUserMedia) {
+					soporteCamara = true;
+					navigator.getUserMedia ({
+						video: true,
+						audio: false
+					},
+					function(localMediaStream) {
+						var video = $('#fondo')[0];
+						window.URL = (window.URL || window.mozURL || window.msURL || window.oURL || window.webkitURL);
+						video.src = window.URL.createObjectURL(localMediaStream);
+						video.onplaying = function(evento) {
+								setTimeout(function() {
+									if (($(window).width() - $("#fondo").outerWidth(true)) > ($(window).height() - $("#fondo").outerHeight(true))) {
+										$("#fondo").css("position", "absolute").css("left", "0px").css("top", "0px").css("width", "100%");
+										$("#fondo").css("top", "-" + (($("#fondo").outerHeight(true) - $(window).height()) / 2) + "px");
+									} else if (($(window).width() - $("#fondo").outerWidth(true)) < ($(window).height() - $("#fondo").outerHeight(true))) {
+										$("#fondo").css("position", "absolute").css("left", "0px").css("top", "0px").css("height", "100%");
+										$("#fondo").css("left", "-" + (($("#fondo").outerWidth(true) - $(window).width()) / 2) + "px");
+									} else
+										$("#fondo").css("position", "absolute").css("left", "0px").css("top", "0px").css("width", "100%");
+								}, 1000);
+						}
+						//video.play();
+					},
+					function(error) {
+						soporteCamara = false;
+					});
+				} else {
+					soporteCamara = false;
+				}
+				
+				$('#mainbtn').click(function(){
+					$('.deg0, .deg30, .deg60, .deg90').toggleClass('open');
+				});
+				
+				reiniciar();
+			});
+			
+			function onDeviceReady() {
+				document.addEventListener("menubutton", onMenuKey, false);
+			}
+			
+			function onMenuKey() {
+				$("#mainbtn").click();
 			}
 		</script>
 	</head>
 	<body>
-		<div id="area" style="position: fixed; width: 100%; height: 100%;"></div>
-		<div><a href="#" data-role="button" data-inline="true" data-mini="true" onclick="$('#menu').show();">Menu</a> <span id="fps">0</span> <span id="log">?</span></div>
-		<div style="display: inline-block;">
-			<div id="cubo" style="width: 300px; height: 300px; border: 1px solid black; display: inline-block;"></div>
-			<div id="espejo1" style="width: 300px; height: 300px; border: 1px solid black; display: inline-block;"></div>
+		<div id="area" style="position: fixed; width: 100%; height: 100%; background-color: black;">
+			<video id="fondo"></video>
 		</div>
-		<div id="menu" style="position: fixed; left: 0px; top: 0px; width: 100%; height: 100%;" onclick="$('#menu').hide();">
-			<div style="width: 126px;">
-				<input type="checkbox" id="cfps" class="custom" data-mini="true" style="width: 100%;" onclick="$('#menu').hide(); !this.checked ? terminafps() : iniciafps();"/>
-				<label for="cfps">FPS</label>
-				<input type="checkbox" id="perspectiva" class="custom" data-mini="true" style="width: 100%;" onclick="$('#menu').hide(); for (var i = 0; i < rubik.length; i++) rubik[i].perspectiva(this.checked);"/>
-				<label for="perspectiva">Perspectiva</label>
-				<a href="#" data-role="button" data-inline="true" data-mini="true" onclick="$('#menu').hide(); reiniciar();">Reiniciar</a>
-				<a href="#" data-role="button" data-inline="true" data-mini="true" onclick="$('#menu').hide(); rubik[0].aleatorio();">Aleatorio</a>
-				<a href="#" data-role="button" data-inline="true" data-mini="true" onclick="$('#menu').hide(); rubik[0].memoria(memoria++);">Memoria</a>
-				<a href="#" data-role="button" data-inline="true" data-mini="true" onclick="$('#menu').hide(); rubik[0].expandir(1.5);">Expandir</a>
-				<a href="#" data-role="button" data-inline="true" data-mini="true" onclick="$('#menu').hide(); rubik[0].contraer(1.5);">Contraer</a>
-				<a href="#" data-role="button" data-inline="true" data-mini="true" onclick="$('#menu').hide(); rubik[0].desligarCaras(rubik[1].Contenedor()); rubik[1].desligarCaras(rubik[0].Contenedor());">Separar</a>
+		
+		<table style="position: fixed; width: 100%; height: 100%; text-align: center;">
+			<tr style="height: 75px;">
+				<td>
+					<div id="frm">
+						<form id="theForm" class="simform" autocomplete="off">
+							<div class="simform-inner">
+								<ol class="questions">
+									<li>
+										<span><label for="q1">Lados cubo (3 = 3*3)</label></span>
+										<input id="q1" name="q1" type="text" value="3"/>
+									</li>
+									<li>
+										<span><label for="q2">Aleatorio = a; Memoria = m</label></span>
+										<input id="q2" name="q2" type="text" value="a"/>
+									</li>
+									<li>
+										<span><label for="q3">Número espejos</label></span>
+										<input id="q3" name="q3" type="text" value="1"/>
+									</li>
+								</ol><!-- /questions -->
+								<button class="submit" type="submit">Jugar</button>
+								<div class="controls">
+									<button class="next"></button>
+									<div class="progress"></div>
+									<span class="number">
+										<span class="number-current"></span>
+										<span class="number-total"></span>
+									</span>
+									<span class="error-message"></span>
+								</div><!-- / controls -->
+							</div><!-- /simform-inner -->
+							<span class="final-message"></span>
+						</form><!-- /simform -->			
+					</div>
+					<script src="js/classie.js"></script>
+					<script src="js/stepsForm.js"></script>
+					<script>
+						var theForm = document.getElementById('theForm');
+						function configuracion() {
+							$(".current").removeClass("current");
+							$('.simform-inner').show();
+							new stepsForm(theForm, {
+								onSubmit : function( form ) {
+									$('.simform-inner').hide();
+									reiniciar();
+								}
+							} );
+							setTimeout(function() {
+								$(".ui-input-text").css("height", "30px");
+								$("input[type='text']").css("position", "relative").css("top", "-21px").css("font-size", "20pt").focus(function() { $(this).select(); });
+								$(".next").css("background-color", "black").css("position", "relative").css("top", "-5px");
+								$("#theForm").css("position", "relative").css("top", "-50px");
+								$("#q1").focus();
+							}, 500);
+						}
+					</script>
+					<style>
+						
+					</style>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<table id="cubos" style="width: 100%; height: 100%; text-align: center;">
+						<tr>
+							<td id="cubo"></td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+		
+		<div>
+			<div id="container">
+				<div id="corner"><a href="#"><i id="mainbtn" class="fa fa-bars fa-2x fa-inverse"></i></a>
+					<svg height="200" width="200">
+						<circle cx="0" cy="0" r="75" fill="black"></circle>
+					</svg>
+				</div>
+			</div>
+			<div class="circle-container">
+				<a href="#" class="deg0"><i class="fa fa-home fa-2x" style="color: white;" onclick="reiniciar();"></i></a>
+				<a href="#" class="deg30"><i class="fa fa-stop fa-2x" style="color: white;" onclick="perspectivaValor = !perspectivaValor; for (var i = 0; i < rubik.length; i++) rubik[i].perspectiva(perspectivaValor);"></i></a>
+				<a href="#" class="deg60"><i class="fa fa-play fa-2x" style="color: white;" onclick="detener();"></i></a>
+				<a href="#" class="deg90"><i class="fa fa-cog fa-2x" style="color: white;" onclick="configuracion();"></i></a>
 			</div>
 		</div>
 	</body>
